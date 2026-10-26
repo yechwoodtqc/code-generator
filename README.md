@@ -24,4 +24,4 @@ The app calls the existing HTTPS endpoint:
 - Only install this administrator tool on a device you control.
 
 ## Build
-Pushes to `main` build a debug APK in GitHub Actions. Open **Actions → Build Code Generator APK** and download the `yw-code-generator-debug` artifact from a successful run.
+Pushes to `main` build a debug APK in GitHub Actions. You can also run **Actions → Build Code Generator APK → Run workflow** manually. Download the `yw-code-generator-debug` artifact from a successful run.
