@@ -169,7 +169,21 @@ public class MainActivity extends Activity {
                 InputStream stream = responseCode >= 200 && responseCode < 300
                         ? connection.getInputStream() : connection.getErrorStream();
                 String responseBody = readAll(stream);
-                JSONObject response = new JSONObject(responseBody);
+                JSONObject response;
+                try {
+                    response = new JSONObject(responseBody);
+                } catch (Exception parseError) {
+                    if (responseCode < 200 || responseCode >= 300) {
+                        String error = "Code service returned HTTP " + responseCode
+                                + ". Check the service configuration and admin secret.";
+                        runOnUiThread(() -> finishWithError(error));
+                    } else {
+                        String error = "Code service returned an unreadable response (HTTP "
+                                + responseCode + ").";
+                        runOnUiThread(() -> finishWithError(error));
+                    }
+                    return;
+                }
 
                 if (responseCode < 200 || responseCode >= 300) {
                     String error = response.optString("error",
@@ -185,8 +199,12 @@ public class MainActivity extends Activity {
                 }
                 runOnUiThread(() -> showCodes(codes, requestedTtl));
             } catch (Exception ex) {
-                runOnUiThread(() -> finishWithError(
-                        "Could not contact the code service. Check internet access and try again."));
+                String detail = ex.getClass().getSimpleName();
+                String message = ex.getMessage();
+                String error = "Connection failed (" + detail
+                        + (message == null || message.trim().isEmpty() ? "" : ": " + message)
+                        + "). Check internet access and the service URL.";
+                runOnUiThread(() -> finishWithError(error));
             } finally {
                 if (connection != null) connection.disconnect();
                 runOnUiThread(() -> generateButton.setEnabled(true));
