@@ -3,11 +3,11 @@ plugins {
 }
 
 android {
-    namespace 'com.yw.codegenerator'
+    namespace 'com.lge.codegenerator'
     compileSdk 35
 
     defaultConfig {
-        applicationId 'com.yw.codegenerator'
+        applicationId 'com.lge.codegenerator'
         minSdk 23
         targetSdk 28
         versionCode 1
