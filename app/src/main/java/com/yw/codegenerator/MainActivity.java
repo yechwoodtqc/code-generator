@@ -29,6 +29,7 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import javax.net.ssl.HttpsURLConnection;
 
 public class MainActivity extends Activity {
     private static final String CODE_ENDPOINT =
@@ -148,6 +149,9 @@ public class MainActivity extends Activity {
             try {
                 URL url = new URL(CODE_ENDPOINT);
                 connection = (HttpURLConnection) url.openConnection();
+                if (connection instanceof HttpsURLConnection) {
+                    LegacyTlsCompat.configure(this, (HttpsURLConnection) connection);
+                }
                 connection.setRequestMethod("POST");
                 connection.setConnectTimeout(15000);
                 connection.setReadTimeout(20000);
